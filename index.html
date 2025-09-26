@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Control de Asistencia - Prototipo</title>
+  <style>
+    :root {
+      --color-primario: #0056b3;
+      --color-exito: #28a745;
+      --color-error: #dc3545;
+      --color-fondo: #f4f4f4;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-fondo);
+    }
+    header {
+      background-color: var(--color-primario);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #003f7f;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .section {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+    .oculto {
+      display: none !important;
+    }
+    h2 {
+      color: var(--color-primario);
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button.success {
+      background-color: var(--color-exito);
+      color: white;
+      border: none;
+    }
+    button.error {
+      background-color: var(--color-error);
+      color: white;
+      border: none;
+    }
+    .fingerprint-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      width: 100%;
+      margin-top: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .log {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+    footer {
+      background-color: #ddd;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .botones {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 300px;
+      margin: auto;
+    }
+    .btn-asistencia {
+      background-color: var(--color-exito);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-admin {
+      background-color: var(--color-primario);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-volver {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .section {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Control de Asistencia</h1>
+  </header>
+
+  <nav id="nav-bar" class="oculto">
+    <a onclick="mostrarSeccion('registro')">Registro</a>
+    <a onclick="mostrarSeccion('errores')">Errores</a>
+    <a onclick="mostrarSeccion('administracion')">Administración</a>
+    <a onclick="mostrarSeccion('ajustes')">Ajustes</a>
+    <a onclick="cerrarSesion()">Cerrar sesión</a>
+  </nav>
+
+  <!-- Página principal -->
+  <section class="section" id="inicio">
+    <h2>Bienvenido</h2>
+    <div class="botones">
+      <button class="btn-asistencia" onclick="mostrarSeccion('registro')">Registrar Asistencia</button>
+      <button class="btn-admin" onclick="mostrarSeccion('autenticacion')">Administración de Asistencia</button>
+    </div>
+  </section>
+
+  <section class="section oculto" id="registro">
+    <h2>Registro de Asistencia</h2>
+    <div class="input-group">
+      <label for="metodo">Método de Registro</label>
+      <select id="metodo">
+        <option>Huella</option>
+        <option>Reconocimiento Facial</option>
+        <option>PIN</option>
+        <option>Tarjeta</option>
+        <option>Clave</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Hora actual</label>
+      <input type="text" value="08:30 AM" disabled>
+    </div>
+    <button id="btn-entrada" class="success">Registrar Entrada</button>
+    <button id="btn-salida" class="success">Registrar Salida</button>
+    <div class="log" id="registro-log"><strong>Registro del día:</strong><br>Entrada: --<br>Salida: --</div>
+    <button class="btn-volver" onclick="mostrarSeccion('inicio')">⬅ Volver al inicio</button>
+  </section>
+
+  <section class="section oculto" id="autenticacion">
+    <h2>Pantalla de Autenticación</h2>
+    <div class="input-group">
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" placeholder="Ingresa tu usuario">
+    </div>
+    <div class="input-group">
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" placeholder="Ingresa tu contraseña">
+    </div>
+    <button id="btn-login" class="success">Iniciar Sesión</button>
+    <button class="fingerprint-button" onclick="alert('Verificación de huella simulada')">Verificar con huella</button>
+    <button class="btn-volver" onclick="mostrarSeccion('inicio')">⬅ Volver al inicio</button>
+  </section>
+
+  <section class="section oculto" id="errores">
+    <h2>Reporte de Errores</h2>
+    <div class="log">
+      <p><strong>Fecha:</strong> 15/06/2025<br><strong>Error:</strong> Fallo de conexión a base de datos</p>
+      <p><strong>Fecha:</strong> 14/06/2025<br><strong>Error:</strong> Usuario no encontrado</p>
+    </div>
+    <button class="error">Descargar Reporte</button>
+  </section>
+
+  <section class="section oculto" id="administracion">
+    <h2>Panel de Administración</h2>
+    <p>Opciones administrativas como gestión de usuarios, reportes, permisos, etc.</p>
+    <button class="success">Agregar Usuario</button>
+    <button class="success">Ver Reportes</button>
+  </section>
+
+  <section class="section oculto" id="ajustes">
+    <h2>Configuración y Ajustes</h2>
+    <div class="input-group">
+      <label for="tema">Tema del sistema</label>
+      <select id="tema">
+        <option>Claro</option>
+        <option>Oscuro</option>
+      </select>
+    </div>
+    <button class="success">Guardar Cambios</button>
+  </section>
+
+  <footer>
+    &copy; 2025 Sistema de Asistencia. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    function mostrarSeccion(id) {
+      const secciones = document.querySelectorAll(".section");
+      secciones.forEach(seccion => seccion.classList.add("oculto"));
+      document.getElementById(id).classList.remove("oculto");
+    }
+
+    function cerrarSesion() {
+      document.getElementById("nav-bar").classList.add("oculto");
+      mostrarSeccion("inicio");
+    }
+
+    // Lógica de inicio de sesión
+    document.querySelector("#btn-login").addEventListener("click", function () {
+      const usuario = document.getElementById("usuario").value;
+      const contrasena = document.getElementById("contrasena").value;
+
+      if (usuario === "admin" && contrasena === "1234") {
+        document.getElementById("nav-bar").classList.remove("oculto");
+        mostrarSeccion("registro");
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    });
+
+    // Al cargar, mostrar la pantalla de inicio
+    window.onload = function () {
+      mostrarSeccion("inicio");
+    };
+  
+    // Funcionalidad de Control de Asistencia
+    document.getElementById("btn-entrada").addEventListener("click", function() {
+      const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      document.getElementById("registro-log").innerHTML =
+        "<strong>Registro del día:</strong><br>Entrada: " + hora + "<br>Salida: --";
+    });
+
+    document.getElementById("btn-salida").addEventListener("click", function() {
+      const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      let contenido = document.getElementById("registro-log").innerHTML;
+      document.getElementById("registro-log").innerHTML =
+        contenido.replace("Salida: --", "Salida: " + hora);
+    });
+  </script>
+  <script>
+    const CHECK_EVERY_MS = 5000;
+    async function checkVersion() {
+      try {
+        const res = await fetch('version.txt?ts=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) resturn;
+        const v = (await res.text()).trim();
+        const prev = localStorage.getItem('site_version');
+        if (prev === null) {
+          localStorage.setItem('site_version', v);
+        } else if (prev !== v) {
+        localStorage.setItem('site_version', v);
+        local.reload();
+        }
+      } catch (e) {
+      }
+    }
+    checkVersion();
+    setInterval(checkVersion, CHECK_EVERY_MS);
+  </script>
+</body>
+</html>
