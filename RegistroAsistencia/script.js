@@ -1,6 +1,4 @@
-// ===============================
-// 📌 Navegación con historial
-// ===============================
+// Navegación con historial
 function navegar(id) {
   history.pushState({seccion: id}, "", "#" + id);
   mostrarSeccion(id);
@@ -25,9 +23,8 @@ window.onpopstate = function(event) {
   }
 };
 
-// ===============================
-// 📌 Login simulado
-// ===============================
+
+// Login simulado
 document.querySelector("#btn-login").addEventListener("click", function () {
   const usuario = document.getElementById("usuario").value;
   const contrasena = document.getElementById("contrasena").value;
@@ -41,9 +38,9 @@ document.querySelector("#btn-login").addEventListener("click", function () {
   }
 });
 
-// ===============================
-// 📌 Control de asistencia
-// ===============================
+
+//  Control de asistencia
+
 document.getElementById("btn-entrada").addEventListener("click", function() {
   const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   document.getElementById("registro-log").innerHTML =
@@ -57,9 +54,9 @@ document.getElementById("btn-salida").addEventListener("click", function() {
     contenido.replace("Salida: --", "Salida: " + hora);
 });
 
-// ===============================
-// 📌 Campo dinámico (PIN / Clave)
-// ===============================
+
+// Campo dinámico (PIN / Clave)
+
 document.getElementById("metodo").addEventListener("change", function() {
   const valor = this.value;
   const campoExtra = document.getElementById("campo-extra");
@@ -75,9 +72,9 @@ document.getElementById("metodo").addEventListener("change", function() {
   }
 });
 
-// ===============================
-// 📌 Reloj en tiempo real
-// ===============================
+
+//  Reloj en tiempo real
+
 function actualizarHora() {
   const formato = document.getElementById("formatoHora")?.value || "12";
   let opciones = {hour: '2-digit', minute: '2-digit'};
@@ -88,18 +85,18 @@ function actualizarHora() {
 
 setInterval(actualizarHora, 1000);
 
-// ===============================
-// 📌 Ajustes
-// ===============================
+
+//  Ajustes
+
 function guardarAjustes() {
   const tema = document.getElementById("tema").value;
   document.body.classList.toggle("dark", tema === "oscuro");
   alert("✅ Ajustes guardados");
 }
 
-// ===============================
-// 📌 Iniciar
-// ===============================
+
+// Iniciar
+
 window.onload = function () {
   navegar("inicio");
   actualizarHora();
@@ -155,4 +152,5 @@ function actualizarReportes() {
   html += "</table>";
   document.getElementById("tablaAsistencias").innerHTML = html;
 }
+
 
